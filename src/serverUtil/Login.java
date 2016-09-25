@@ -1,7 +1,7 @@
 package serverUtil;
 
-/**
- * Created by noam on 9/25/16.
- */
-public class Login {
+import serverUtil.impl.TriesExceededException;
+
+public interface Login {
+    public boolean verify(String username, String password) throws TriesExceededException;
 }
