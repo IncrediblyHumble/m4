@@ -3,6 +3,7 @@ package serverUtil.impl;
 import serverUtil.Login;
 
 /**
+ * An implementation of Login that uses the hardcoded username "foo" and password "bar"
  * Created by noam on 9/25/16.
  */
 public class LoginHardcoded implements Login{
