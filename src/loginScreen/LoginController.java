@@ -25,19 +25,11 @@ public class LoginController {
     @FXML
     private TextField passField;
 
-    @FXML
-    private boolean _okClicked = false;
-
-    @FXML
-    private boolean _cancelClicked = false;
-
-
     /**
      * Called when the user clicks cancel.
      */
     @FXML
     private void handleCancelPressed(ActionEvent event) throws IOException {
-        _cancelClicked = true;
         Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("welcomeScreen/welcome.fxml"));
         primaryStage.setScene(new Scene(root, 700, 500));
@@ -51,28 +43,22 @@ public class LoginController {
         //First validate the data to insure it is at least reasonable
         if (isInputValid()) {
             Login newUser = new LoginHardcoded();
-            boolean success = false;
-            boolean error = false;
             try {
-                success = newUser.verify(nameField.getText(), passField.getText());
+                if(newUser.verify(nameField.getText(), passField.getText())) {
+                    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("homeScreen/home.fxml"));
+                    primaryStage.setScene(new Scene(root, 700, 500));
+                }  else {
+                    Alert loginAlert = new Alert(Alert.AlertType.ERROR);
+                    loginAlert.setHeaderText("Please correct invalid fields");
+                    loginAlert.setContentText("Invalid username or password");
+                    loginAlert.showAndWait();
+                }
             } catch (TriesExceededException e) {
-                error = true;
-            }
-            if (success) {
-                _okClicked = true;
-                Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("homeScreen/home.fxml"));
-                primaryStage.setScene(new Scene(root, 700, 500));
-            } else if (error) {
                 Alert triesExceededAlert = new Alert(Alert.AlertType.ERROR);
                 triesExceededAlert.setHeaderText("Invalid Attempt");
                 triesExceededAlert.setContentText("Too many attempted logins");
                 triesExceededAlert.showAndWait();
-            } else {
-                Alert loginAlert = new Alert(Alert.AlertType.ERROR);
-                loginAlert.setHeaderText("Please correct invalid fields");
-                loginAlert.setContentText("Invalid username or password");
-                loginAlert.showAndWait();
             }
         }
     }
@@ -95,7 +81,6 @@ public class LoginController {
             error = true;
             errorMessage += "No valid password entered.\n";
         }
-
 
         //no error message means success / good input
         if (!error) {
