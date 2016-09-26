@@ -31,24 +31,26 @@ public class LoginController {
     @FXML
     private boolean _cancelClicked = false;
 
-    private Stage _loginStage;
+//    private Stage _loginStage;
 
-    /**
-     * Sets the stage of this dialog.
-     *
-     * @param dialogStage the stage for this dialog
-     */
-    public void setDialogStage(Stage dialogStage) {
-        _loginStage = dialogStage;
-    }
+//    /**
+//     * Sets the stage of this dialog.
+//     *
+//     * @param dialogStage the stage for this dialog
+//     */
+//    public void setDialogStage(Stage dialogStage) {
+//        _loginStage = dialogStage;
+//    }
 
     /**
      * Called when the user clicks cancel.
      */
     @FXML
-    private void handleCancelPressed() {
+    private void handleCancelPressed(ActionEvent event) throws IOException {
         _cancelClicked = true;
-        _loginStage.close();
+        Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("welcomeScreen/welcome.fxml"));
+        primaryStage.setScene(new Scene(root, 700, 500));
     }
 
     /**
@@ -64,21 +66,21 @@ public class LoginController {
                 success = newUser.verify(nameField.getText(), passField.getText());
             } catch (TriesExceededException e) {
                 Alert triesExceededAlert = new Alert(Alert.AlertType.ERROR);
-                triesExceededAlert.initOwner(_loginStage);
+//                triesExceededAlert.initOwner(_loginStage);
                 triesExceededAlert.setHeaderText("Invalid Attempt");
                 triesExceededAlert.setContentText("Too many attempted logins");
                 triesExceededAlert.showAndWait();
             }
             if (success) {
                 _okClicked = true;
-                _loginStage.close();
+//                _loginStage.close();
                 Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
                 Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("homeScreen/home.fxml"));
                 primaryStage.setScene(new Scene(root, 700, 500));
 
             } else {
                 Alert loginAlert = new Alert(Alert.AlertType.ERROR);
-                loginAlert.initOwner(_loginStage);
+//                loginAlert.initOwner(_loginStage);
                 loginAlert.setHeaderText("Please correct invalid fields");
                 loginAlert.setContentText("Invalid username or password");
                 loginAlert.showAndWait();
@@ -112,7 +114,7 @@ public class LoginController {
         } else {
             // Puts an alert if they didn't do anything
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(_loginStage);
+//            alert.initOwner(_loginStage);
             alert.setTitle("Invalid Fields");
             alert.setHeaderText("Please correct invalid fields");
             alert.setContentText(errorMessage);
