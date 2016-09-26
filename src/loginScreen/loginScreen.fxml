@@ -46,7 +46,7 @@
          </GridPane.margin></TextField>
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
-            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleCancelPressed" text="Login" />
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleOKPressed" text="Login" />
             <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelPressed" text="Cancel" />
          </children>
          <padding>

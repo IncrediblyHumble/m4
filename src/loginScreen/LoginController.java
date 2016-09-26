@@ -7,6 +7,13 @@ import javafx.scene.control.Alert;
 import serverUtil.Login;
 import serverUtil.impl.LoginHardcoded;
 import serverUtil.impl.TriesExceededException;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+
+import java.io.IOException;
 
 /**
  * Created by Derek Henry
@@ -48,7 +55,7 @@ public class LoginController {
      * Called when the user clicks ok.
      */
     @FXML
-    private void handleOKPressed() {
+    private void handleOKPressed(ActionEvent event) throws IOException {
         //First validate the data to insure it is at least reasonable
         if (isInputValid()) {
             Login newUser = new LoginHardcoded();
@@ -65,6 +72,9 @@ public class LoginController {
             if (success) {
                 _okClicked = true;
                 _loginStage.close();
+                Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("homeScreen/home.fxml"));
+                primaryStage.setScene(new Scene(root, 700, 500));
 
             } else {
                 Alert loginAlert = new Alert(Alert.AlertType.ERROR);
