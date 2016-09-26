@@ -1,4 +1,4 @@
-package welcomeScreen;
+package homeScreen;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -9,10 +9,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class WelcomeController {
-    public void login(ActionEvent event)throws IOException{
+public class HomeController {
+    public void logout(ActionEvent event) throws IOException{
         Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("homeScreen/home.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("welcomeScreen/welcome.fxml"));
         primaryStage.setScene(new Scene(root, 700, 500));
     }
 }
