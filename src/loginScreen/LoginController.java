@@ -4,6 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
+import serverUtil.Login;
+import serverUtil.impl.LoginHardcoded;
+import serverUtil.impl.TriesExceededException;
 
 /**
  * Created by Derek Henry
@@ -37,6 +40,7 @@ public class LoginController {
      */
     @FXML
     private void handleCancelPressed() {
+        _cancelClicked = true;
         _loginStage.close();
     }
 
@@ -47,11 +51,28 @@ public class LoginController {
     private void handleOKPressed() {
         //First validate the data to insure it is at least reasonable
         if (isInputValid()) {
-            //if the data is reasonable, then remember the the student data in the window
+            Login newUser = new LoginHardcoded();
+            boolean success = false;
+            try {
+                success = newUser.verify(nameField.getText(), passField.getText());
+            } catch (TriesExceededException e) {
+                Alert triesExceededAlert = new Alert(Alert.AlertType.ERROR);
+                triesExceededAlert.initOwner(_loginStage);
+                triesExceededAlert.setHeaderText("Invalid Attempt");
+                triesExceededAlert.setContentText("Too many attempted logins");
+                triesExceededAlert.showAndWait();
+            }
+            if (success) {
+                _okClicked = true;
+                _loginStage.close();
 
-            //signal success and close this dialog window.
-            _okClicked = true;
-            _loginStage.close();
+            } else {
+                Alert loginAlert = new Alert(Alert.AlertType.ERROR);
+                loginAlert.initOwner(_loginStage);
+                loginAlert.setHeaderText("Please correct invalid fields");
+                loginAlert.setContentText("Invalid username or password");
+                loginAlert.showAndWait();
+            }
         }
     }
 
@@ -64,12 +85,14 @@ public class LoginController {
         String errorMessage = "";
         boolean error = false;
 
-        //for now just check they actually typed something
+        //checks if they typed something
         if (nameField.getText() == null || nameField.getText().length() == 0) {
-            errorMessage += "No valid student name!\n";
+            error = true;
+            errorMessage += "No valid username entered.\n";
         }
         if (passField.getText() == null || passField.getText().length() == 0) {
-            errorMessage += "No valid major entered!\n";
+            error = true;
+            errorMessage += "No valid password entered.\n";
         }
 
 
@@ -77,7 +100,7 @@ public class LoginController {
         if (!error) {
             return true;
         } else {
-            // Show the error message if bad data
+            // Puts an alert if they didn't do anything
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(_loginStage);
             alert.setTitle("Invalid Fields");
